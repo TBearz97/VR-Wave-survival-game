@@ -1,0 +1,10 @@
+# ninja log v5
+31	1679	7648685160903579	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	8ba0ec8f9a7ca75a
+24	1696	7648685161056874	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	fc358eb142f3a3c8
+12	1731	7648685161490731	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	c9726c554112f12d
+37	1755	7648685161657017	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	1b4296750854e9bc
+6	1830	7648685162506289	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	125cba4cc45b8c27
+45	1851	7648685162660371	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	2cce0371c373c59d
+18	2113	7648685165309568	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	d1ac502ac2aa4e18
+1	2248	7648685166627020	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	e70309fc4003c081
+2249	2436	7648685168609130	C:/Users/Main/VR Wave survival game/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/73p1k363/obj/arm64-v8a/libgame.so	1c4ad4fcac3c5ded
