@@ -27,7 +27,7 @@ public abstract class Magazine : MonoBehaviour, IMagazine
     {
         if (!grab.isSelected)
         {
-            Destroy(gameObject, 5f);
+            Destroy(gameObject);
         }
     }
 }

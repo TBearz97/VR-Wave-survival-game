@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
@@ -21,13 +22,13 @@ public abstract class  Weapon : MonoBehaviour, IWeapon
     [field: SerializeField] public XRDirectInteractor rightHand { get; set; }
     [field: SerializeField] public XRDirectInteractor leftHand { get; set; }
     [field: SerializeField] public XRGrabInteractable XRGrabInteractable { get; set; }
+    [field: SerializeField] public TextMeshProUGUI ammoField {  get; set; }
 
     private XRGrabInteractable grab;
     public Magazine currMag { get; set; }
 
     [field: Header("Input")]
     [field: SerializeField] public InputActionProperty triggerInput { get; set; }
-    [field: SerializeField] public InputActionProperty test {  get; set; }
 
     [field: Header("Audio Resources")]
     [field: SerializeField] public AudioSource audioSource { get; set; }
@@ -51,7 +52,7 @@ public abstract class  Weapon : MonoBehaviour, IWeapon
 
     public virtual void Fire()
     {
-        if (rightHand.IsSelecting(XRGrabInteractable) || leftHand.IsSelecting(XRGrabInteractable))
+        if (triggerInput.action.IsPressed() && Time.time >= nextShotTime)
         {
             if (currMag != null && currMag.ammoCount > 0)
             {
@@ -71,14 +72,17 @@ public abstract class  Weapon : MonoBehaviour, IWeapon
                 audioSource.resource = gunShot;
                 audioSource.Play();
                 currMag.ConsumeAmmo();
+                ammoField.SetText(currMag.ammoCount.ToString());
             }
+            nextShotTime = Time.time + 1f / fireRate;
         }
     }
+
 
     public virtual void Despawn() {
         if (!grab.isSelected)
         {
-            Destroy(gameObject.transform.parent.gameObject, 5f);
+            Destroy(gameObject.transform.parent.gameObject);
         }
     }
 
@@ -86,6 +90,7 @@ public abstract class  Weapon : MonoBehaviour, IWeapon
     {
         Magazine go = (magazineSlot.GetOldestInteractableSelected() as MonoBehaviour)?.GetComponent<Magazine>();
         currMag = go;
+        ammoField.SetText(currMag.ammoCount.ToString());
         audioSource.resource = magIn;
         audioSource.Play();
     }

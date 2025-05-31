@@ -23,26 +23,11 @@ public class Ak47 : Weapon
                    baseAccuracy,
                    baseHipAccuracy,
                    baseBulletForce);
-    }
-
-
-    void OnEnable() {
-        triggerInput.action.Enable();
-        test.action.Enable();
-    } 
-    void OnDisable() {
-        triggerInput.action.Disable();
-        test.action.Disable();
     } 
 
     void Update()
     {
         base.Despawn();
-        if (triggerInput.action.IsPressed() && Time.time >= nextShotTime)
-        {
-            base.Fire();              
-            nextShotTime = Time.time + 1f / baseFireRate;
-        }
     }
 
     public override void Despawn()

@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     private bool alive = true;
 
     private GameObject targetPos;
-    private Tower tower;
+    private Player player;
 
     [Header("Audio")]
     public AudioSource audioSource;
@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-        tower = targetPos.GetComponent<Tower>();
+        player = targetPos.GetComponent<Player>();
 
         nav.speed = speeds;
         health = maxHealth;
@@ -41,12 +41,12 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         aggressive.SetActive(attacking);
+        if (attacking)
+        {
+            nav.SetDestination(targetPos.transform.position);
+        }
         if (targetPos != null && !nav.pathPending && nav.remainingDistance <= 0.1f && alive)
         {
-            if (attacking) {
-                tower.TakeDamage(damage);
-                attacking = false;
-            }
             FindPath();
         }
         if (!nav.hasPath)
@@ -90,7 +90,6 @@ public class Enemy : MonoBehaviour
             audioSource.resource = attackSound;
             audioSource.volume = 0.5f;
             audioSource.Play();
-            nav.SetDestination(targetPos.transform.position);
         }
         else
         {
@@ -109,4 +108,23 @@ public class Enemy : MonoBehaviour
         targetPos = Pos;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        Player player = collision.gameObject.GetComponent<Player>();
+        if (player != null)
+        {
+            player.TakeDamage(damage);
+            attacking = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Player player = other.gameObject.GetComponent<Player>();
+        if (player != null)
+        {
+            player.TakeDamage(damage);
+            attacking = false;
+        }
+    }
 }

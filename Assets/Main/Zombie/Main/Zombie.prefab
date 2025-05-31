@@ -489,7 +489,6 @@ GameObject:
   - component: {fileID: 6147798515322854685}
   - component: {fileID: 2557553620513658017}
   - component: {fileID: 8918418286073543357}
-  - component: {fileID: 4244197672040562346}
   m_Layer: 0
   m_Name: Aggressive
   m_TagString: Untagged
@@ -565,28 +564,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4244197672040562346
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 8515096395202685708, guid: 8d33a13943872bd4680db4a5e21c79e5, type: 3}
-  m_PrefabInstance: {fileID: 5534317311173301670}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2511922235348570938}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &2535013380248137738
 GameObject:
   m_ObjectHideFlags: 0
@@ -2287,7 +2264,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Aggressive
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
