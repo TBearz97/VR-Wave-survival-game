@@ -7,28 +7,37 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public abstract class  Weapon : MonoBehaviour, IWeapon
 {
+
+    [Header("Base Stats")]
+    [SerializeField] public float baseDamage = 33f;
+    [SerializeField] public float baseFireRate = 600f / 60f;
+    [SerializeField] public float baseArmorPen = 0.40f;
+    [SerializeField] public float baseAccuracy = 0.85f;
+    [SerializeField] public float baseHipAccuracy = 0.30f;
+    [SerializeField] public float baseFocusAccuracy = 0.85f;
+    [SerializeField] public float baseBulletForce = 100f;
+    [SerializeField] public bool baseIsAutomatic = true;
     public float damage { get; set; }
     public float fireRate { get; set; }
-    public float range { get; set; }
     public float armorPen { get; set; }
     public float accuracy { get; set; }
     public float hipfireAccuracy { get; set; }
+    public float focusAccuracy { get; set; }
     public float bulletForce { get; set; }
+
+    public bool isAutomatic { get; set; }
 
     [field: Header("References")]
     [field: SerializeField] public GameObject bulletPrefab;
     [field: SerializeField] public Transform barrelEnd;
     [field: SerializeField] public XRSocketInteractor magazineSlot { get; set; }
-    [field: SerializeField] public XRDirectInteractor rightHand { get; set; }
-    [field: SerializeField] public XRDirectInteractor leftHand { get; set; }
+    //[field: SerializeField] public XRDirectInteractor rightHand { get; set; }
+    //[field: SerializeField] public XRDirectInteractor leftHand { get; set; }
     [field: SerializeField] public XRGrabInteractable XRGrabInteractable { get; set; }
     [field: SerializeField] public TextMeshProUGUI ammoField {  get; set; }
 
     private XRGrabInteractable grab;
     public Magazine currMag { get; set; }
-
-    [field: Header("Input")]
-    [field: SerializeField] public InputActionProperty triggerInput { get; set; }
 
     [field: Header("Audio Resources")]
     [field: SerializeField] public AudioSource audioSource { get; set; }
@@ -38,21 +47,32 @@ public abstract class  Weapon : MonoBehaviour, IWeapon
 
     public float nextShotTime { get; set; }
 
-    public virtual void Initialize(float dam, float fRate, float rang, float pen, float acc, float hipacc, float bullForce)
+    public virtual void Initialize()
     {
-        damage = dam;
-        fireRate = fRate;
-        range = rang;
-        armorPen = pen;
-        accuracy = acc;
-        hipfireAccuracy = hipacc;
-        bulletForce = bullForce;
+        damage = baseDamage;
+        fireRate = baseFireRate;
+        armorPen = baseArmorPen;
+        accuracy = baseAccuracy;
+        hipfireAccuracy = baseHipAccuracy;
+        focusAccuracy = baseFocusAccuracy;
+        bulletForce = baseBulletForce;
+        isAutomatic = baseIsAutomatic;
         grab = gameObject.GetComponentInParent<XRGrabInteractable>();
+    }
+
+    public virtual void UpdateStats(float dam, float fRate, float pen, float acc, float hipacc, float focacc)
+    {
+        damage = dam + baseDamage;
+        fireRate = fRate + baseFireRate;
+        armorPen = pen + baseArmorPen;
+        accuracy = acc + baseAccuracy;
+        hipfireAccuracy = hipacc + baseHipAccuracy;
+        focusAccuracy = focacc + baseFocusAccuracy;
     }
 
     public virtual void Fire()
     {
-        if (triggerInput.action.IsPressed() && Time.time >= nextShotTime)
+        if (Time.time >= nextShotTime)
         {
             if (currMag != null && currMag.ammoCount > 0)
             {
@@ -68,7 +88,6 @@ public abstract class  Weapon : MonoBehaviour, IWeapon
                 Bullet script = bullet.GetComponent<Bullet>();
                 script.damage = damage;
                 rb.AddForce(direction * bulletForce);
-                Destroy(bullet, 5f);
                 audioSource.resource = gunShot;
                 audioSource.Play();
                 currMag.ConsumeAmmo();
@@ -77,6 +96,7 @@ public abstract class  Weapon : MonoBehaviour, IWeapon
             nextShotTime = Time.time + 1f / fireRate;
         }
     }
+
 
 
     public virtual void Despawn() {

@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4100992743137841049
 Transform:
   m_ObjectHideFlags: 0
@@ -540,6 +540,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2087609560946209459}
     - target: {fileID: 6766709786838465937, guid: d47d667b0230309418fee4155b91402b, type: 3}
+      propertyPath: baseAccuracy
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6766709786838465937, guid: d47d667b0230309418fee4155b91402b, type: 3}
       propertyPath: <magazineSlot>k__BackingField
       value: 
       objectReference: {fileID: 7660167726085503703}
@@ -547,6 +551,14 @@ PrefabInstance:
       propertyPath: <XRGrabInteractable>k__BackingField
       value: 
       objectReference: {fileID: 2502517365052358431}
+    - target: {fileID: 6766709786838465937, guid: d47d667b0230309418fee4155b91402b, type: 3}
+      propertyPath: <triggerInput>k__BackingField.m_Reference
+      value: 
+      objectReference: {fileID: 83097790271614945, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+    - target: {fileID: 6766709786838465937, guid: d47d667b0230309418fee4155b91402b, type: 3}
+      propertyPath: <triggerInput>k__BackingField.m_UseReference
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

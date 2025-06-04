@@ -113,5 +113,5 @@ AssetOrigin:
   productId: 213197
   packageName: Unity Terrain - URP Demo Scene
   packageVersion: 1.0.3
-  assetPath: Assets/TerrainDemoScene_URP/Prefabs/Skybox/Models/SkyboxMountains03.fbx
+  assetPath: Assets/Main/TerrainDemoScene_URP/Prefabs/Skybox/Models/SkyboxMountains03.fbx
   uploadId: 727820

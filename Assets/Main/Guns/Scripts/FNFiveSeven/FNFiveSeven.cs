@@ -1,16 +1,22 @@
 using UnityEngine;
 
-public class FNFiveSeven : MonoBehaviour
+public class FNFiveSeven : Weapon
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+
+
+    void Awake()
     {
-        
+        Initialize();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        base.Despawn();
+    }
+
+    public override void Despawn()
+    {
+        Destroy(gameObject);
     }
 }

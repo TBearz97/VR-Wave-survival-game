@@ -121,5 +121,5 @@ AssetOrigin:
   productId: 213197
   packageName: Unity Terrain - URP Demo Scene
   packageVersion: 1.0.3
-  assetPath: Assets/TerrainDemoScene_URP/Prefabs/Rocks/Models/Rock_D.FBX
+  assetPath: Assets/Main/TerrainDemoScene_URP/Prefabs/Rocks/Models/Rock_D.FBX
   uploadId: 727820

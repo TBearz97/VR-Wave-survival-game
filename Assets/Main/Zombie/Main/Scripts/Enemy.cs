@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     public float maxHealth;
     public float damage;
     public float targetRadius = 20f;
+    [Range(0, 100)]
     public int attackChance;
     public int speeds;
     public GameObject aggressive;
@@ -24,6 +25,7 @@ public class Enemy : MonoBehaviour
     public AudioSource audioSource;
     public AudioResource attackSound;
     public AudioResource loopSound;
+    public AudioClip hitSound;
 
     private NavMeshAgent nav;
     private Animator animator;
@@ -68,27 +70,31 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage)
+    public bool TakeDamage(float damage)
     {
         health = health - damage;
+        audioSource.PlayOneShot(hitSound, 1);
         if (health < 0)
         {
             alive = false;
             attacking = false;
             animator.SetBool("Die", true);
             nav.ResetPath();
+            audioSource.Stop();
             Destroy(this.gameObject, 5f);
+            return false;
         }
+        return true;
     }
 
     public void FindPath()
     {
-        int attack = Random.Range(0, attackChance);
-        if (attack == 0)
+        attacking = Random.Range(0, 99) < attackChance;
+        if (attacking)
         {
-            attacking = true;
-            audioSource.resource = attackSound;
-            audioSource.volume = 0.5f;
+            audioSource.resource = loopSound;
+            audioSource.spatialBlend = 1;
+            audioSource.loop = true;
             audioSource.Play();
         }
         else
@@ -108,23 +114,15 @@ public class Enemy : MonoBehaviour
         targetPos = Pos;
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        Player player = collision.gameObject.GetComponent<Player>();
-        if (player != null)
-        {
-            player.TakeDamage(damage);
-            attacking = false;
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         Player player = other.gameObject.GetComponent<Player>();
-        if (player != null)
+        if (player != null && attacking)
         {
             player.TakeDamage(damage);
             attacking = false;
+            audioSource.loop = false;
+            audioSource.Stop();
         }
     }
 }
