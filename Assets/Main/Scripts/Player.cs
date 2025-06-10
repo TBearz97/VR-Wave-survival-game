@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class Player : MonoBehaviour
@@ -16,18 +17,28 @@ public class Player : MonoBehaviour
     public float hipAccuracy;
     public float focusAccuracy;
     public float moveSpeed = 0.04f;
-    private bool canMove = true;
+    private bool canMove;
+    private int experience;
     public TextMeshProUGUI healthField;
+    public TextMeshProUGUI expField;
+
+    public int spawnCount = 20;
 
     [Header("Audio")]
     public List<AudioClip> grunts;
     private AudioSource audioSource;
 
+    [Header("Canvas")]
+    public GameObject levelUpScreen;
+    public GameObject pauseMenu;
+
     [Header("Inputs")]
     public InputActionProperty leftJoy;
     public InputActionProperty rightJoy;
     public InputActionProperty rightPrimary;
+    public InputActionProperty rightSecondary;
     public InputActionProperty leftPrimary;
+    public InputActionProperty leftSecondary;
     public InputActionProperty triggerRight;
     public InputActionProperty triggerLeft;
 
@@ -45,6 +56,7 @@ public class Player : MonoBehaviour
     private NavMeshAgent navMeshAgent;
     private Weapon rightWeapon;
     private Weapon leftWeapon;
+    private bool isPaused;
 
     
     void Start()
@@ -56,12 +68,21 @@ public class Player : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    void StartUp()
+    {
+        Time.timeScale = 0f;
+        canMove = false;
+        pauseMenu.SetActive(true);
+        isPaused = true;
+    }
     
     void Update()
     {
         Movement();
         FireWeapon();
         Inventory();
+        LevelUp();
+        TogglePause();
     }
 
     void FireWeapon()
@@ -198,5 +219,53 @@ public class Player : MonoBehaviour
         canMove = true;
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
+    }
+
+    public void LevelUp()
+    {
+        if (leftSecondary.action.WasPressedThisFrame())
+        {
+            //levelUpScreen.SetActive(true);
+        }
+    }
+
+    public void TogglePause()
+    {
+        if (rightSecondary.action.WasPressedThisFrame())
+        {
+            isPaused = !isPaused;
+
+            if (isPaused)
+            {
+                Time.timeScale = 0f;
+                canMove = false;
+                pauseMenu.SetActive(true);
+                Debug.Log("Paused");
+            }
+            else
+            {
+                Time.timeScale = 1f;
+                canMove= true;
+                pauseMenu.SetActive(false);
+                Debug.Log("Unpaused");
+            }
+        }
+    }
+
+    public void GainExperience(int health)
+    {
+        experience = (int)(experience + (health * 0.1f));
+        expField.text = experience.ToString();
+    }
+
+    public void Restart()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }

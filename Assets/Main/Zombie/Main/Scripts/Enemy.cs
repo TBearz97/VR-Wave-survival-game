@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Audio;
@@ -9,17 +10,19 @@ public class Enemy : MonoBehaviour
     [Header("Stats")]
     public float maxHealth;
     public float damage;
-    public float targetRadius = 20f;
+    private float targetRadius = 30f;
     [Range(0, 100)]
     public int attackChance;
-    public int speeds;
+    public int speed;
     public GameObject aggressive;
+    public int maxActive;
 
     private bool attacking;
     private bool alive = true;
 
-    private GameObject targetPos;
-    private Player player;
+    public GameObject player;
+    public GameObject graveyard;
+    private Player playerScript;
 
     [Header("Audio")]
     public AudioSource audioSource;
@@ -34,9 +37,8 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
-        player = targetPos.GetComponent<Player>();
+        playerScript = player.GetComponent<Player>();
 
-        nav.speed = speeds;
         health = maxHealth;
     }
 
@@ -45,9 +47,9 @@ public class Enemy : MonoBehaviour
         aggressive.SetActive(attacking);
         if (attacking)
         {
-            nav.SetDestination(targetPos.transform.position);
+            nav.SetDestination(player.transform.position);
         }
-        if (targetPos != null && !nav.pathPending && nav.remainingDistance <= 0.1f && alive)
+        if (player != null && !nav.pathPending && nav.remainingDistance <= 0.1f && alive)
         {
             FindPath();
         }
@@ -81,7 +83,8 @@ public class Enemy : MonoBehaviour
             animator.SetBool("Die", true);
             nav.ResetPath();
             audioSource.Stop();
-            Destroy(this.gameObject, 5f);
+            playerScript.GainExperience((int)maxHealth);
+            DisableAfterSeconds(5f);
             return false;
         }
         return true;
@@ -101,17 +104,12 @@ public class Enemy : MonoBehaviour
         {
             Vector2 randomOffset = Random.insideUnitCircle * targetRadius;
             Vector3 pathPos = new Vector3(
-                targetPos.transform.position.x + randomOffset.x,
-                targetPos.transform.position.y,
-                targetPos.transform.position.z + randomOffset.y);
+                player.transform.position.x + randomOffset.x,
+                player.transform.position.y,
+                player.transform.position.z + randomOffset.y);
 
             nav.SetDestination(pathPos);
         }
-    }
-
-    public void SetTargetPos(GameObject Pos)
-    {
-        targetPos = Pos;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -124,5 +122,13 @@ public class Enemy : MonoBehaviour
             audioSource.loop = false;
             audioSource.Stop();
         }
+    }
+
+    private IEnumerator DisableAfterSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        gameObject.SetActive(false);
+        transform.SetParent(graveyard.transform, false);
+        animator.SetBool("Die", false);
     }
 }

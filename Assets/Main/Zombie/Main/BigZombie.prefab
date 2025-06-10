@@ -1450,7 +1450,7 @@ GameObject:
   - component: {fileID: 5478218484862897956}
   - component: {fileID: 6583094817437432706}
   m_Layer: 0
-  m_Name: Zombie
+  m_Name: BigZombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1466,7 +1466,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -88.20137, y: 4.97, z: -158.68613}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7102716881951377990}
@@ -1508,12 +1508,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad8b915127785994087c263ef9dec5fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  damage: 5
-  attackChance: 10
-  speed: 4
+  maxHealth: 200
+  damage: 20
+  attackChance: 40
+  speed: 2
   aggressive: {fileID: 2511922235348570938}
-  maxActive: 50
+  maxActive: 10
   player: {fileID: 0}
   audioSource: {fileID: 0}
   attackSound: {fileID: 8300000, guid: 168c9a5ac7025814ea9c89e5098a3cad, type: 3}
@@ -1529,7 +1529,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.3
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
