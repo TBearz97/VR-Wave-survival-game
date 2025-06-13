@@ -63,7 +63,7 @@ public class TerrainEnvironmentSpawner : MonoBehaviour
             {
                 spawn.SetActive(true);
                 spawn.transform.SetParent(aliveZombies.transform, false);
-                spawn.transform.position = GetRandomPositionOnTerrain();
+                spawn.transform.localPosition = GetRandomPositionOnTerrain();
                 return;
             }
         }
@@ -107,7 +107,7 @@ public class TerrainEnvironmentSpawner : MonoBehaviour
     public Vector3 GetRandomPositionOnTerrain()
     {
         TerrainData data = terrain.terrainData;
-        Vector3 terrainPos = terrain.transform.position;
+        Vector3 terrainPos = terrain.transform.localPosition;
 
         float minX = terrainPos.x + areaCenterOffset.x - areaSize.x / 2f;
         float maxX = minX + areaSize.x;
@@ -133,7 +133,7 @@ public class TerrainEnvironmentSpawner : MonoBehaviour
         }
 
         Debug.LogWarning("Could not find valid NavMesh position, returning terrain center.");
-        return terrain.transform.position + Vector3.up * 2f;
+        return terrain.transform.localPosition + Vector3.up * 2f;
     }
 
 
@@ -142,7 +142,7 @@ public class TerrainEnvironmentSpawner : MonoBehaviour
         if (terrain == null) return;
 
         Gizmos.color = Color.green;
-        Vector3 center = terrain.transform.position + new Vector3(areaCenterOffset.x, 0f, areaCenterOffset.y);
+        Vector3 center = terrain.transform.localPosition + new Vector3(areaCenterOffset.x, 0f, areaCenterOffset.y);
         Vector3 size = new Vector3(areaSize.x, 0.1f, areaSize.y);
         Gizmos.DrawWireCube(center, size);
     }

@@ -84,8 +84,9 @@ public class Enemy : MonoBehaviour
             nav.ResetPath();
             audioSource.Stop();
             playerScript.GainExperience((int)maxHealth);
-            DisableAfterSeconds(5f);
-            return false;
+            GetComponent<CapsuleCollider>().enabled = false;
+            StartCoroutine(DisableAfterSeconds(5));
+            return true;
         }
         return true;
     }

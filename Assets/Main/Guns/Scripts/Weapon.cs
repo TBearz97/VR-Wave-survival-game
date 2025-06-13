@@ -7,11 +7,15 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public abstract class  Weapon : MonoBehaviour, IWeapon
 {
+    [Header("Canvas")]
+    [SerializeField] public TextMeshProUGUI damageText;
+    [SerializeField] public TextMeshProUGUI fireRateText;
+    [SerializeField] public TextMeshProUGUI hipAccuracyText;
+    [SerializeField] public TextMeshProUGUI focusAccuracyText;
 
     [Header("Base Stats")]
     [SerializeField] public float baseDamage = 33f;
     [SerializeField] public float baseFireRate = 600f / 60f;
-    [SerializeField] public float baseArmorPen = 0.40f;
     [SerializeField] public float baseAccuracy = 0.85f;
     [SerializeField] public float baseHipAccuracy = 0.30f;
     [SerializeField] public float baseFocusAccuracy = 0.85f;
@@ -31,8 +35,6 @@ public abstract class  Weapon : MonoBehaviour, IWeapon
     [field: SerializeField] public GameObject bulletPrefab;
     [field: SerializeField] public Transform barrelEnd;
     [field: SerializeField] public XRSocketInteractor magazineSlot { get; set; }
-    //[field: SerializeField] public XRDirectInteractor rightHand { get; set; }
-    //[field: SerializeField] public XRDirectInteractor leftHand { get; set; }
     [field: SerializeField] public XRGrabInteractable XRGrabInteractable { get; set; }
     [field: SerializeField] public TextMeshProUGUI ammoField {  get; set; }
 
@@ -51,23 +53,31 @@ public abstract class  Weapon : MonoBehaviour, IWeapon
     {
         damage = baseDamage;
         fireRate = baseFireRate;
-        armorPen = baseArmorPen;
         accuracy = baseAccuracy;
         hipfireAccuracy = baseHipAccuracy;
         focusAccuracy = baseFocusAccuracy;
         bulletForce = baseBulletForce;
         isAutomatic = baseIsAutomatic;
         grab = gameObject.GetComponentInParent<XRGrabInteractable>();
+        UpdateCanvas();
     }
 
-    public virtual void UpdateStats(float dam, float fRate, float pen, float acc, float hipacc, float focacc)
+    public virtual void UpdateStats(float dam, float fRate, float acc, float hipacc, float focacc)
     {
         damage = dam + baseDamage;
         fireRate = fRate + baseFireRate;
-        armorPen = pen + baseArmorPen;
         accuracy = acc + baseAccuracy;
         hipfireAccuracy = hipacc + baseHipAccuracy;
         focusAccuracy = focacc + baseFocusAccuracy;
+        UpdateCanvas();
+    }
+
+    public virtual void UpdateCanvas()
+    {
+        damageText.text = damage.ToString();
+        fireRateText.text = fireRate.ToString();
+        hipAccuracyText.text = hipfireAccuracy.ToString();
+        focusAccuracyText.text = focusAccuracy.ToString();
     }
 
     public virtual void Fire()

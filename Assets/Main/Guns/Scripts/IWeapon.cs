@@ -4,7 +4,6 @@ public interface IWeapon
 {
     public float damage { get; set; }
     public float fireRate { get; set; }
-    public float armorPen {  get; set; }
     public float accuracy { get; set; }
     public float hipfireAccuracy { get; set; }
     public float focusAccuracy { get; set; }

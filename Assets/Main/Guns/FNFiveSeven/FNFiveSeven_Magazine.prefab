@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8770132878724052504}
   - component: {fileID: 5617692935952495779}
   - component: {fileID: 5022557534892217186}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: FNFiveSeven_Magazine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -252,7 +252,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 768
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -272,5 +272,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e076e764813ffb54f8b55ba1be0dbd6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <ammoCount>k__BackingField: 30
-  <maxAmmo>k__BackingField: 30
+  <ammoCount>k__BackingField: 18
+  <maxAmmo>k__BackingField: 18
+  <maxAmmoText>k__BackingField: {fileID: 0}

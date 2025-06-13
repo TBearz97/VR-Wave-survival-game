@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class Player : MonoBehaviour
@@ -19,8 +20,11 @@ public class Player : MonoBehaviour
     public float moveSpeed = 0.04f;
     private bool canMove;
     private int experience;
+    private int expCost;
     public TextMeshProUGUI healthField;
     public TextMeshProUGUI expField;
+    public MagazineSpawn akMagazineSpawn;
+    public MagazineSpawn FNMagazineSpawn;
 
     public int spawnCount = 20;
 
@@ -29,8 +33,8 @@ public class Player : MonoBehaviour
     private AudioSource audioSource;
 
     [Header("Canvas")]
-    public GameObject levelUpScreen;
     public GameObject pauseMenu;
+    public List<GameObject> upgradeButtons;
 
     [Header("Inputs")]
     public InputActionProperty leftJoy;
@@ -45,6 +49,8 @@ public class Player : MonoBehaviour
     [Header("Controllers")]
     public XRDirectInteractor rightHand;
     public XRDirectInteractor leftHand;
+    public GameObject rightPoke;
+    public GameObject leftPoke;
 
     [Header("Sockets")]
     public GameObject gunSocket;
@@ -61,19 +67,14 @@ public class Player : MonoBehaviour
     
     void Start()
     {
+        expCost = 100;
         rightWeapon = null;
         leftWeapon = null;
         navMeshAgent = GetComponent<NavMeshAgent>();
-        healthField.SetText(health.ToString());
+        updateHealth();
         audioSource = GetComponent<AudioSource>();
-    }
-
-    void StartUp()
-    {
-        Time.timeScale = 0f;
-        canMove = false;
-        pauseMenu.SetActive(true);
         isPaused = true;
+        canMove = false;
     }
     
     void Update()
@@ -82,7 +83,11 @@ public class Player : MonoBehaviour
         FireWeapon();
         Inventory();
         LevelUp();
-        TogglePause();
+
+        if (rightSecondary.action.WasPressedThisFrame())
+        {
+            TogglePause();
+        }
     }
 
     void FireWeapon()
@@ -101,7 +106,7 @@ public class Player : MonoBehaviour
         {
             var parent = (selected as MonoBehaviour)?.gameObject;
             weapon = parent?.GetComponentInChildren<Weapon>();
-            weapon.UpdateStats(damage, fireRate, armorPen, accuracy, hipAccuracy, focusAccuracy);
+            weapon.UpdateStats(damage, fireRate, accuracy, hipAccuracy, focusAccuracy);
         }
         else if (selected == null)
         {
@@ -148,28 +153,23 @@ public class Player : MonoBehaviour
 
     void Inventory()
     {
-        if (rightPrimary.action.IsPressed() && !leftPrimary.action.IsPressed())
+        if (rightPrimary.action.WasPressedThisFrame() && !leftPrimary.action.IsPressed())
         {
             EnterInventoryMode();
             gunSocket.SetActive(true);
             UpdateZPosition(gunSocket.transform.parent.gameObject);
         }
-        else {
-            gunSocket.SetActive(false);
-        }
 
-        if (leftPrimary.action.IsPressed() && !rightPrimary.action.IsPressed())
+        if (leftPrimary.action.WasPressedThisFrame() && !rightPrimary.action.IsPressed())
         {
             EnterInventoryMode();
             magazineSocket.SetActive(true);
             UpdateZPosition(gunSocket.transform.parent.gameObject);
         }
-        else { 
-            magazineSocket.SetActive(false);
-
-        }
-        if (!rightPrimary.action.IsPressed() && !leftPrimary.action.IsPressed())
+        if (rightPrimary.action.WasReleasedThisFrame() || leftPrimary.action.WasReleasedThisFrame())
         {
+            magazineSocket.SetActive(false);
+            gunSocket.SetActive(false);
             ExitInventoryMode();
         }
 
@@ -193,12 +193,13 @@ public class Player : MonoBehaviour
     {
 
         health = health - damage;
-        healthField.SetText(health.ToString());
+        updateHealth();
         AudioClip clip = grunts[Random.Range(0, grunts.Count - 1)];
         audioSource.PlayOneShot(clip, 1);
         if (health < 0)
         {
-            healthField.SetText("Game Over");
+            TogglePause();
+            pauseMenu.SetActive(true);
         }
     }
 
@@ -223,33 +224,89 @@ public class Player : MonoBehaviour
 
     public void LevelUp()
     {
-        if (leftSecondary.action.WasPressedThisFrame())
+        if (leftSecondary.action.WasPressedThisFrame() && experience > expCost)
         {
-            //levelUpScreen.SetActive(true);
+            experience = experience - expCost;
+            TogglePause();
+            HashSet<GameObject> selectedUpgrades = new HashSet<GameObject>();
+
+            GameObject upgrade1;
+            do
+            {
+                upgrade1 = getRandomUpgrade();
+            } while (!selectedUpgrades.Add(upgrade1));
+            setupUpgradeButton(upgrade1, new Vector3(0, 0, 0));
+
+            GameObject upgrade2;
+            do
+            {
+                upgrade2 = getRandomUpgrade();
+            } while (!selectedUpgrades.Add(upgrade2));
+            setupUpgradeButton(upgrade2, new Vector3(0, 60, 0));
+
+            GameObject upgrade3;
+            do
+            {
+                upgrade3 = getRandomUpgrade();
+            } while (!selectedUpgrades.Add(upgrade3));
+            setupUpgradeButton(upgrade3, new Vector3(0, 120, 0));
         }
+    }
+
+    private void setupUpgradeButton(GameObject buttonObj, Vector3 position)
+    {
+        buttonObj.SetActive(true);
+        buttonObj.transform.localPosition = position;
+
+        Button button = buttonObj.GetComponent<Button>();
+        if (button != null)
+        {
+            button.onClick.RemoveAllListeners();  // Avoid duplicates
+            button.onClick.AddListener(OnUpgradeSelected);
+        }
+    }
+    public void OnUpgradeSelected()
+    {
+        TogglePause();
+        foreach (GameObject upgrade in upgradeButtons)
+        {
+            upgrade.SetActive(false);
+        }
+    }
+
+    GameObject getRandomUpgrade()
+    {
+        int rand = Random.Range(0, upgradeButtons.Count);
+        return upgradeButtons[rand];
     }
 
     public void TogglePause()
     {
-        if (rightSecondary.action.WasPressedThisFrame())
-        {
-            isPaused = !isPaused;
+       
+        isPaused = !isPaused;
 
-            if (isPaused)
+        if (isPaused)
+        {
+            rightPoke.SetActive(true);
+            leftPoke.SetActive(true);
+            Time.timeScale = 0f;
+            Time.fixedDeltaTime = 0.02f * Time.timeScale;
+            canMove = false;
+            if (rightSecondary.action.WasPressedThisFrame())
             {
-                Time.timeScale = 0f;
-                canMove = false;
                 pauseMenu.SetActive(true);
-                Debug.Log("Paused");
-            }
-            else
-            {
-                Time.timeScale = 1f;
-                canMove= true;
-                pauseMenu.SetActive(false);
-                Debug.Log("Unpaused");
             }
         }
+        else
+        {
+            rightPoke.SetActive(false);
+            leftPoke.SetActive(false);
+            Time.timeScale = 1f;
+            Time.fixedDeltaTime = 0.02f;
+            canMove = true; 
+            pauseMenu.SetActive(false);
+        }
+
     }
 
     public void GainExperience(int health)
@@ -267,5 +324,42 @@ public class Player : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public void updateHealth()
+    {
+        healthField.SetText(health.ToString());
+    }
+
+    public void UpgradeHealth()
+    {
+        health += 10;
+        updateHealth();
+    }
+
+    public void UpgradeDamage()
+    {
+        damage += 5;
+    }
+
+    public void UpgradeFireRate()
+    {
+        fireRate += 0.1f;
+    }
+
+    public void UpgradeHipFire()
+    {
+        hipAccuracy += 0.05f;
+    }
+
+    public void UpgradeFocusFire()
+    {
+        focusAccuracy += 0.05f;
+    }
+
+    public void UpgradeMagSize()
+    {
+        akMagazineSpawn.maxAmmo += 5;
+        FNMagazineSpawn.maxAmmo += 5;
     }
 }

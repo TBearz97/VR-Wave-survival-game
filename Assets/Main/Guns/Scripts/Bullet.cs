@@ -4,6 +4,11 @@ public class Bullet : MonoBehaviour
 {
     public float damage;
 
+    private void Update()
+    {
+        Destroy(gameObject, 10f);
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         Enemy enemy = collision.gameObject.GetComponent<Enemy>();
