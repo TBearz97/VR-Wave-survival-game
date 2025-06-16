@@ -1513,8 +1513,9 @@ MonoBehaviour:
   attackChance: 10
   speed: 4
   aggressive: {fileID: 2511922235348570938}
-  maxActive: 50
+  maxActive: 100
   player: {fileID: 0}
+  graveyard: {fileID: 0}
   audioSource: {fileID: 0}
   attackSound: {fileID: 8300000, guid: 168c9a5ac7025814ea9c89e5098a3cad, type: 3}
   loopSound: {fileID: 8300000, guid: e1e7f406c66d0c34f94726e83f3b5cbd, type: 3}
@@ -1586,7 +1587,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 100
+  MaxDistance: 50
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0

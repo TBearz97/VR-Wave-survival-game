@@ -131,5 +131,6 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
         transform.SetParent(graveyard.transform, false);
         animator.SetBool("Die", false);
+        GetComponent<CapsuleCollider>().enabled = true;
     }
 }

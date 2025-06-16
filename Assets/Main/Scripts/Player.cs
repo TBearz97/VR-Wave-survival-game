@@ -9,6 +9,8 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class Player : MonoBehaviour
 {
+    private static Player instance;
+
     [Header("Player Stats")]
     public float health;
     public float damage;
@@ -64,7 +66,17 @@ public class Player : MonoBehaviour
     private Weapon leftWeapon;
     private bool isPaused;
 
-    
+    //void Awake()
+    //{
+    //    if (instance != null)
+    //    {
+    //        Destroy(gameObject); // Prevent duplicates
+    //        return;
+    //    }
+
+    //    instance = this;
+    //    DontDestroyOnLoad(gameObject);
+    //}
     void Start()
     {
         expCost = 100;
@@ -73,8 +85,8 @@ public class Player : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         updateHealth();
         audioSource = GetComponent<AudioSource>();
-        isPaused = true;
-        canMove = false;
+        isPaused = false;
+        TogglePause();
     }
     
     void Update()
@@ -224,9 +236,13 @@ public class Player : MonoBehaviour
 
     public void LevelUp()
     {
-        if (leftSecondary.action.WasPressedThisFrame() && experience > expCost)
+        if (leftSecondary.action.WasPressedThisFrame() && experience >= expCost)
         {
             experience = experience - expCost;
+            expField.text = experience.ToString();
+            if (experience < expCost) { 
+                expField.color = Color.white;
+            }
             TogglePause();
             HashSet<GameObject> selectedUpgrades = new HashSet<GameObject>();
 
@@ -270,6 +286,7 @@ public class Player : MonoBehaviour
         TogglePause();
         foreach (GameObject upgrade in upgradeButtons)
         {
+            spawnCount += 5;
             upgrade.SetActive(false);
         }
     }
@@ -312,13 +329,17 @@ public class Player : MonoBehaviour
     public void GainExperience(int health)
     {
         experience = (int)(experience + (health * 0.1f));
+        if (experience >= expCost)
+        {
+            expField.color = Color.red;
+        }
         expField.text = experience.ToString();
     }
 
     public void Restart()
     {
         string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(currentSceneName);
+        SceneManager.LoadScene(currentSceneName, LoadSceneMode.Single);
     }
 
     public void ExitGame()
@@ -333,33 +354,50 @@ public class Player : MonoBehaviour
 
     public void UpgradeHealth()
     {
-        health += 10;
+        health = Mathf.Lerp(health, 200, 0.2f);
         updateHealth();
     }
 
     public void UpgradeDamage()
     {
-        damage += 5;
+        damage = Mathf.Lerp(damage, 30, 0.2f);
+        UpdateWeapon();
     }
 
     public void UpgradeFireRate()
     {
-        fireRate += 0.1f;
+        fireRate = Mathf.Lerp(fireRate, 5, 0.2f);
+        UpdateWeapon();
     }
 
     public void UpgradeHipFire()
     {
-        hipAccuracy += 0.05f;
+        hipAccuracy = Mathf.Lerp(hipAccuracy, 0.5f, 0.2f);
+        UpdateWeapon();
     }
 
     public void UpgradeFocusFire()
     {
-        focusAccuracy += 0.05f;
+
+        focusAccuracy = Mathf.Lerp(focusAccuracy, 0.5f, 0.2f);
+        UpdateWeapon();
     }
 
     public void UpgradeMagSize()
     {
         akMagazineSpawn.maxAmmo += 5;
         FNMagazineSpawn.maxAmmo += 5;
+    }
+
+    void UpdateWeapon()
+    {
+        if (rightWeapon != null)
+        {
+            rightWeapon.UpdateStats(damage, fireRate, accuracy, hipAccuracy, focusAccuracy);
+        }
+        if (leftWeapon != null)
+        {
+            leftWeapon.UpdateStats(damage, fireRate, accuracy, hipAccuracy, focusAccuracy);
+        }
     }
 }

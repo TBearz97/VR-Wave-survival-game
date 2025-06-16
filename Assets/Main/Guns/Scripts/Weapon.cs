@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
@@ -74,10 +73,10 @@ public abstract class  Weapon : MonoBehaviour, IWeapon
 
     public virtual void UpdateCanvas()
     {
-        damageText.text = damage.ToString();
-        fireRateText.text = fireRate.ToString();
-        hipAccuracyText.text = hipfireAccuracy.ToString();
-        focusAccuracyText.text = focusAccuracy.ToString();
+        damageText.text = ((int)(damage)).ToString();
+        fireRateText.text = ((int)(fireRate)).ToString();
+        hipAccuracyText.text = hipfireAccuracy.ToString("F2");
+        focusAccuracyText.text = focusAccuracy.ToString("F2");
     }
 
     public virtual void Fire()

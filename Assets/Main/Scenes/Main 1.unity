@@ -1315,6 +1315,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1844250141}
     - target: {fileID: 1853990594717664054, guid: 0d6db245d2ee7f449b3db6a9ef8b7d6e, type: 3}
+      propertyPath: baseAccuracy
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1853990594717664054, guid: 0d6db245d2ee7f449b3db6a9ef8b7d6e, type: 3}
       propertyPath: baseFireRate
       value: 3
       objectReference: {fileID: 0}
@@ -1328,7 +1332,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1853990594717664054, guid: 0d6db245d2ee7f449b3db6a9ef8b7d6e, type: 3}
       propertyPath: baseHipAccuracy
-      value: 0.85
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1853990594717664054, guid: 0d6db245d2ee7f449b3db6a9ef8b7d6e, type: 3}
       propertyPath: baseIsAutomatic
@@ -1338,6 +1342,10 @@ PrefabInstance:
       propertyPath: hipAccuracyText
       value: 
       objectReference: {fileID: 13525846}
+    - target: {fileID: 1853990594717664054, guid: 0d6db245d2ee7f449b3db6a9ef8b7d6e, type: 3}
+      propertyPath: baseFocusAccuracy
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1853990594717664054, guid: 0d6db245d2ee7f449b3db6a9ef8b7d6e, type: 3}
       propertyPath: focusAccuracyText
       value: 
@@ -4756,6 +4764,7 @@ GameObject:
   - component: {fileID: 856518952}
   - component: {fileID: 856518951}
   - component: {fileID: 856518950}
+  - component: {fileID: 856518953}
   m_Layer: 0
   m_Name: XR UI Evensystem
   m_TagString: Untagged
@@ -4832,6 +4841,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &856518953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856518949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d0925adacbbcea4086eb4f536b3639e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &891096115
 GameObject:
   m_ObjectHideFlags: 0
@@ -5029,7 +5050,7 @@ Transform:
   m_GameObject: {fileID: 945970615}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -247, y: -6790, z: -255}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7917,7 +7938,7 @@ MonoBehaviour:
   - {fileID: 1127992084609228112, guid: 34776a9356ed54141bf7fed4fded28a0, type: 3}
   - {fileID: 1722164173232303198, guid: 942660f4ebcf9cd438f45122b0ad63eb, type: 3}
   - {fileID: 8316334779356437779, guid: 35e087cfaa0f57244b67615777188d3e, type: 3}
-  numberOfTrees: 15000
+  numberOfTrees: 10000
   areaSize: {x: 700, y: 700}
   areaCenterOffset: {x: 535.1, y: 569.7}
   enemyPrefabs:
@@ -10228,6 +10249,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1600722812}
     - target: {fileID: 2542068516107556977, guid: f57f7f46705a23e438efeb9fca058d53, type: 3}
+      propertyPath: baseFocusAccuracy
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2542068516107556977, guid: f57f7f46705a23e438efeb9fca058d53, type: 3}
       propertyPath: focusAccuracyText
       value: 
       objectReference: {fileID: 568661294}
@@ -10326,6 +10351,7 @@ GameObject:
   - component: {fileID: 1949521291}
   - component: {fileID: 1949521290}
   - component: {fileID: 1949521289}
+  - component: {fileID: 1949521294}
   m_Layer: 0
   m_Name: Right Controller
   m_TagString: Untagged
@@ -10494,6 +10520,18 @@ Transform:
   - {fileID: 1430425223}
   m_Father: {fileID: 83970363}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1949521294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949521288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d0925adacbbcea4086eb4f536b3639e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1966187584
 GameObject:
   m_ObjectHideFlags: 0
@@ -10840,6 +10878,7 @@ GameObject:
   - component: {fileID: 2116261354}
   - component: {fileID: 2116261353}
   - component: {fileID: 2116261352}
+  - component: {fileID: 2116261356}
   m_Layer: 0
   m_Name: Left Controller
   m_TagString: Untagged
@@ -11008,6 +11047,18 @@ MonoBehaviour:
   m_StartingInteractionOverridesMap:
   - groupMember: {fileID: 2132875412}
     overrideGroupMembers: []
+--- !u!114 &2116261356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2116261350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d0925adacbbcea4086eb4f536b3639e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2121252840
 PrefabInstance:
   m_ObjectHideFlags: 0
